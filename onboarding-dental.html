@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Formulario de Onboarding · Landing Dental</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#F8F6F2; --white:#fff; --navy:#0D1F3C; --teal:#2A9D8F;
+    --gold:#C9A84C; --border:#E2DDD4; --muted:#6B7280; --text:#1A1A2E;
+    --red:#EF4444; --green:#22C55E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+  .page-wrap{max-width:780px;margin:0 auto;padding:48px 24px 80px;}
+
+  /* Header */
+  .form-header{text-align:center;margin-bottom:48px;}
+  .form-header .logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:24px;
+    font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--navy);}
+  .logo-dot{width:34px;height:34px;background:linear-gradient(135deg,var(--teal),var(--navy));
+    border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.9rem;}
+  .form-header h1{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;
+    color:var(--navy);margin-bottom:12px;line-height:1.2;}
+  .form-header p{color:var(--muted);font-size:.95rem;line-height:1.7;max-width:520px;margin:0 auto;}
+
+  /* Progress bar */
+  .progress-bar{background:var(--border);border-radius:4px;height:6px;margin-bottom:40px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:4px;
+    transition:width .4s ease;width:0%;}
+  .progress-label{text-align:right;font-size:.78rem;color:var(--muted);margin-top:6px;}
+
+  /* Steps */
+  .step{display:none;}
+  .step.active{display:block;animation:fadeIn .3s ease-out;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  /* Section card */
+  .section-card{background:var(--white);border:1.5px solid var(--border);border-radius:20px;
+    padding:32px;margin-bottom:20px;}
+  .section-card h2{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;
+    color:var(--navy);margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+  .section-card .step-desc{color:var(--muted);font-size:.88rem;margin-bottom:24px;line-height:1.6;}
+
+  /* Fields */
+  .field{margin-bottom:20px;}
+  .field label{display:flex;align-items:center;gap:6px;font-size:.83rem;font-weight:600;
+    color:var(--navy);margin-bottom:7px;text-transform:uppercase;letter-spacing:.04em;}
+  .field label .req{color:var(--red);font-size:.9rem;}
+  .field label .tip{color:var(--muted);font-size:.78rem;font-weight:400;
+    text-transform:none;letter-spacing:0;margin-left:4px;}
+  .field input,.field textarea,.field select{
+    width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:11px;
+    font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--text);
+    background:var(--bg);outline:none;transition:border-color .2s;}
+  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--teal);}
+  .field input.error,.field textarea.error,.field select.error{border-color:var(--red);}
+  .field textarea{resize:vertical;min-height:90px;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+
+  /* Day toggles */
+  .days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:8px;}
+  .day-toggle-btn{padding:10px 4px;border:1.5px solid var(--border);border-radius:10px;
+    background:var(--bg);font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;
+    color:var(--muted);cursor:pointer;transition:all .2s;text-align:center;}
+  .day-toggle-btn.on{background:var(--teal);border-color:var(--teal);color:white;}
+
+  .hours-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px;}
+  .hours-row .field{margin-bottom:0;}
+
+  /* Time slots */
+  .slots-container{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+  .slot-chip{display:flex;align-items:center;gap:6px;background:var(--bg);
+    border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;
+    font-size:.82rem;font-weight:600;color:var(--muted);}
+  .slot-chip button{background:none;border:none;color:var(--muted);cursor:pointer;
+    font-size:.85rem;line-height:1;transition:color .2s;padding:0;}
+  .slot-chip button:hover{color:var(--red);}
+  .slot-add-row{display:flex;gap:8px;margin-top:6px;align-items:center;}
+  .slot-add-row input{width:110px;padding:8px 12px;border:1.5px solid var(--border);
+    border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.88rem;
+    color:var(--text);outline:none;transition:border-color .2s;background:var(--bg);}
+  .slot-add-row input:focus{border-color:var(--teal);}
+  .btn-add-slot{background:var(--teal);color:white;border:none;padding:8px 16px;
+    border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;
+    cursor:pointer;transition:all .2s;}
+  .btn-add-slot:hover{background:#1E8A7D;}
+
+  /* Service editor */
+  .service-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:10px;}
+  .service-row{display:grid;grid-template-columns:46px 1fr 140px 36px;gap:10px;
+    align-items:center;background:var(--bg);border:1.5px solid var(--border);
+    border-radius:12px;padding:12px 14px;}
+  .service-row:focus-within{border-color:var(--teal);}
+  .srv-icon{width:36px;text-align:center;background:transparent;border:none;
+    font-size:1.3rem;outline:none;cursor:text;}
+  .srv-name,.srv-price{background:transparent;border:none;font-family:'DM Sans',sans-serif;
+    font-size:.9rem;outline:none;color:var(--text);width:100%;}
+  .srv-name{font-weight:600;}
+  .srv-price{color:var(--teal);font-weight:600;}
+  .btn-del{width:28px;height:28px;border-radius:7px;background:#FEE2E2;
+    border:1px solid #FECACA;color:var(--red);cursor:pointer;font-size:.85rem;
+    display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+  .btn-del:hover{background:#FECACA;}
+  .btn-add-service{width:100%;padding:11px;background:none;
+    border:1.5px dashed var(--border);border-radius:12px;
+    font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;
+    color:var(--muted);cursor:pointer;transition:all .2s;display:flex;
+    align-items:center;justify-content:center;gap:8px;}
+  .btn-add-service:hover{border-color:var(--teal);color:var(--teal);}
+
+  /* Navigation buttons */
+  .nav-btns{display:flex;justify-content:space-between;align-items:center;
+    margin-top:32px;padding-top:24px;border-top:1px solid var(--border);}
+  .btn-prev{background:none;border:1.5px solid var(--border);color:var(--muted);
+    padding:12px 26px;border-radius:50px;font-family:'DM Sans',sans-serif;
+    font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;}
+  .btn-prev:hover{border-color:var(--navy);color:var(--navy);}
+  .btn-prev:disabled{opacity:.3;cursor:not-allowed;}
+  .btn-next{background:linear-gradient(135deg,var(--teal),#1E8A7D);color:white;
+    border:none;padding:13px 32px;border-radius:50px;font-family:'DM Sans',sans-serif;
+    font-size:.9rem;font-weight:700;cursor:pointer;transition:all .3s;
+    box-shadow:0 8px 20px rgba(42,157,143,.3);}
+  .btn-next:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(42,157,143,.4);}
+
+  .step-indicator{font-size:.82rem;color:var(--muted);}
+
+  /* Confirm/preview */
+  .preview-block{background:var(--bg);border:1.5px solid var(--border);border-radius:14px;
+    padding:20px;margin-bottom:16px;}
+  .preview-block h4{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:800;
+    color:var(--navy);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;}
+  .preview-row{display:flex;gap:8px;margin-bottom:6px;font-size:.88rem;}
+  .preview-key{color:var(--muted);min-width:110px;flex-shrink:0;}
+  .preview-val{color:var(--text);font-weight:500;word-break:break-all;}
+
+  /* Export */
+  .export-area{background:#0D1F3C;border-radius:14px;padding:20px;
+    font-family:'Courier New',monospace;font-size:.78rem;color:#94A3B8;
+    line-height:1.7;overflow-x:auto;max-height:320px;overflow-y:auto;
+    white-space:pre-wrap;word-break:break-all;margin-bottom:16px;}
+  .copy-btn{background:var(--gold);color:var(--navy);border:none;
+    padding:12px 28px;border-radius:50px;font-family:'DM Sans',sans-serif;
+    font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;}
+  .copy-btn:hover{background:var(--gold-light,#E8CB7A);}
+
+  /* Success */
+  .success-screen{display:none;text-align:center;padding:60px 20px;}
+  .success-icon{font-size:4rem;margin-bottom:20px;}
+  .success-screen h2{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;
+    color:var(--navy);margin-bottom:12px;}
+  .success-screen p{color:var(--muted);max-width:440px;margin:0 auto;line-height:1.7;}
+
+  @media(max-width:600px){
+    .field-row,.field-row-3{grid-template-columns:1fr;}
+    .days-grid{grid-template-columns:repeat(4,1fr);}
+    .service-row{grid-template-columns:36px 1fr 110px 30px;}
+    .page-wrap{padding:28px 16px 60px;}
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="form-header">
+    <div class="logo"><div class="logo-dot">🦷</div> Landing Dental · Onboarding</div>
+    <h1>Formulario de datos<br>para tu nueva landing</h1>
+    <p>Completá este formulario con los datos de tu clínica. En menos de 10 minutos tendrás toda la información lista para que configuremos tu página web personalizada.</p>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  <div class="progress-label" id="progress-label">Paso 1 de 5</div>
+
+  <!-- ══ PASO 1: Datos de la clínica ══ -->
+  <div class="step active" id="step-1">
+    <div class="section-card">
+      <h2>🏢 Datos de tu clínica</h2>
+      <p class="step-desc">Esta información aparece en el encabezado, pie de página, chatbot y sección de contacto.</p>
+
+      <div class="field">
+        <label>Nombre de la clínica <span class="req">*</span></label>
+        <input type="text" id="f-nombre" placeholder="Ej: Clínica Dental Sonrisas"/>
+      </div>
+      <div class="field">
+        <label>Eslogan <span class="tip">— frase breve debajo del nombre</span></label>
+        <input type="text" id="f-eslogan" placeholder="Ej: Tu sonrisa, nuestra pasión"/>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Año de fundación <span class="req">*</span></label>
+          <input type="number" id="f-fundacion" placeholder="Ej: 2010" min="1900" max="2030"/>
+        </div>
+        <div class="field">
+          <label>WhatsApp Business <span class="tip">— con código de país</span></label>
+          <input type="tel" id="f-whatsapp" placeholder="Ej: +34600000000"/>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Teléfono <span class="req">*</span></label>
+          <input type="tel" id="f-telefono" placeholder="Ej: +34 91 234 56 78"/>
+        </div>
+        <div class="field">
+          <label>Email <span class="req">*</span></label>
+          <input type="email" id="f-email" placeholder="Ej: info@clinica.es"/>
+        </div>
+      </div>
+      <div class="field">
+        <label>Dirección completa <span class="req">*</span></label>
+        <input type="text" id="f-direccion" placeholder="Ej: Calle Gran Vía 45, 28013 Madrid"/>
+      </div>
+      <div class="field">
+        <label>Ciudad / Localidad <span class="req">*</span><span class="tip">— para el SEO</span></label>
+        <input type="text" id="f-ciudad" placeholder="Ej: Madrid"/>
+      </div>
+      <div class="field">
+        <label>URL del sitio web <span class="tip">— si ya tiene dominio</span></label>
+        <input type="url" id="f-url" placeholder="Ej: https://www.midentalplus.es"/>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-prev" disabled>← Anterior</button>
+      <span class="step-indicator" id="si-1">Paso 1 de 5</span>
+      <button class="btn-next" onclick="nextStep(1)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ══ PASO 2: Horarios ══ -->
+  <div class="step" id="step-2">
+    <div class="section-card">
+      <h2>📅 Horarios de atención</h2>
+      <p class="step-desc">Seleccioná los días que abre la clínica y configurá el horario de apertura y cierre. Los días desactivados no aparecerán como opciones en el chatbot.</p>
+
+      <div class="days-grid" id="days-grid"></div>
+      <div class="hours-row">
+        <div class="field">
+          <label>Hora de apertura (general)</label>
+          <input type="time" id="h-desde" value="09:00"/>
+        </div>
+        <div class="field">
+          <label>Hora de cierre (general)</label>
+          <input type="time" id="h-hasta" value="20:00"/>
+        </div>
+      </div>
+      <p style="font-size:.8rem;color:var(--muted);margin-top:10px;">💡 Podés personalizar el horario de días específicos (ej: sábados) en la nota final.</p>
+
+      <div class="field" style="margin-top:20px;">
+        <label>Franjas horarias de citas disponibles</label>
+        <div class="slots-container" id="slots-container"></div>
+        <div class="slot-add-row">
+          <input type="time" id="new-slot" step="1800"/>
+          <button class="btn-add-slot" onclick="addSlot()">+ Añadir hora</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-prev" onclick="prevStep(2)">← Anterior</button>
+      <span class="step-indicator">Paso 2 de 5</span>
+      <button class="btn-next" onclick="nextStep(2)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ══ PASO 3: Servicios ══ -->
+  <div class="step" id="step-3">
+    <div class="section-card">
+      <h2>🦷 Servicios y precios</h2>
+      <p class="step-desc">Editá los servicios que ofrece la clínica. Cada uno aparecerá en la grilla de la landing y en el menú del chatbot. El precio es orientativo y se puede dejar como "Consultar".</p>
+      <div class="service-rows" id="service-rows"></div>
+      <button class="btn-add-service" onclick="addService()">＋ Añadir servicio</button>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-prev" onclick="prevStep(3)">← Anterior</button>
+      <span class="step-indicator">Paso 3 de 5</span>
+      <button class="btn-next" onclick="nextStep(3)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ══ PASO 4: Equipo y extras ══ -->
+  <div class="step" id="step-4">
+    <div class="section-card">
+      <h2>👩‍⚕️ Equipo médico</h2>
+      <p class="step-desc">Datos de los profesionales que aparecerán en la sección "Nuestro equipo". Podés dejar vacíos los que no correspondan.</p>
+      <div id="team-rows"></div>
+    </div>
+    <div class="section-card">
+      <h2>⭐ Estadísticas y reseñas</h2>
+      <p class="step-desc">Datos que aparecen en el hero y en la tarjeta flotante.</p>
+      <div class="field-row-3">
+        <div class="field"><label>Pacientes atendidos</label><input type="text" id="s-pacientes" placeholder="Ej: +3.200"/></div>
+        <div class="field"><label>Años de experiencia</label><input type="text" id="s-anios" placeholder="Ej: 15+"/></div>
+        <div class="field"><label>% Recomendaciones</label><input type="text" id="s-reco" placeholder="Ej: 98%"/></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Rating (Google/Reseñas)</label><input type="text" id="s-rating" placeholder="Ej: 4.9"/></div>
+        <div class="field"><label>Cantidad de reseñas</label><input type="text" id="s-nreviews" placeholder="Ej: 840"/></div>
+      </div>
+    </div>
+    <div class="section-card">
+      <h2>🔗 Redes sociales <span style="font-weight:400;font-size:.85rem;color:var(--muted)">— opcional</span></h2>
+      <p class="step-desc">Dejar vacío lo que no use la clínica.</p>
+      <div class="field-row">
+        <div class="field"><label>Instagram</label><input type="url" id="r-ig" placeholder="https://instagram.com/..."/></div>
+        <div class="field"><label>Facebook</label><input type="url" id="r-fb" placeholder="https://facebook.com/..."/></div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-prev" onclick="prevStep(4)">← Anterior</button>
+      <span class="step-indicator">Paso 4 de 5</span>
+      <button class="btn-next" onclick="nextStep(4)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- ══ PASO 5: Revisión y exportar ══ -->
+  <div class="step" id="step-5">
+    <div class="section-card">
+      <h2>✅ Revisión final</h2>
+      <p class="step-desc">Revisá que todo esté correcto antes de exportar. Podés volver atrás a corregir cualquier dato.</p>
+      <div id="preview-content"></div>
+    </div>
+    <div class="section-card">
+      <h2>📋 Bloque CONFIG listo para copiar</h2>
+      <p class="step-desc">Copiá este bloque y pegalo en el <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:.85rem;">const CONFIG = { ... }</code> del archivo <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:.85rem;">clinica-dental-landing.html</code>.</p>
+      <div class="export-area" id="export-area">Hacé clic en "Generar CONFIG" para ver el código...</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn-next" onclick="generarConfig()">⚙️ Generar CONFIG</button>
+        <button class="copy-btn" onclick="copiarConfig()">📋 Copiar al portapapeles</button>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-prev" onclick="prevStep(5)">← Anterior</button>
+      <span class="step-indicator">Paso 5 de 5</span>
+      <button class="btn-next" onclick="finalizarFormulario()" style="background:linear-gradient(135deg,#22c55e,#16a34a);">✅ Finalizar</button>
+    </div>
+  </div>
+
+  <!-- ══ SUCCESS ══ -->
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">🎉</div>
+    <h2>¡Formulario completado!</h2>
+    <p>El bloque CONFIG está listo. Pegalo en la landing, subí el archivo al hosting del cliente y ya está en línea.<br><br>
+    <strong style="color:var(--teal);">Próximo paso:</strong> subirlo a GitHub Pages, Netlify o el hosting del cliente (ver guía de operaciones).</p>
+    <button class="btn-next" style="margin-top:28px;" onclick="reiniciar()">+ Nuevo cliente</button>
+  </div>
+
+</div>
+
+<script>
+/* ── ESTADO ── */
+const state = {
+  step: 1,
+  totalSteps: 5,
+  dias: { Lunes:true, Martes:true, Miércoles:true, Jueves:true, Viernes:true, Sábado:true, Domingo:false },
+  slots: ['09:00','10:30','12:00','16:00','17:30','19:00'],
+  servicios: [
+    { icono:'🔍', nombre:'Revisión y Limpieza',      precio:'Desde 45€' },
+    { icono:'✨', nombre:'Blanqueamiento Dental',     precio:'Desde 199€' },
+    { icono:'🦷', nombre:'Ortodoncia e Invisalign',   precio:'Desde 1.500€' },
+    { icono:'🔧', nombre:'Implantes Dentales',        precio:'Desde 790€' },
+    { icono:'💎', nombre:'Carillas y Estética',       precio:'Desde 290€/ud' },
+    { icono:'🚨', nombre:'Urgencias Dentales',        precio:'60€ consulta' },
+  ],
+  equipo: [
+    { nombre:'', rol:'', bio:'' },
+    { nombre:'', rol:'', bio:'' },
+    { nombre:'', rol:'', bio:'' },
+  ]
+};
+
+/* ── INIT ── */
+renderDays();
+renderSlots();
+renderServices();
+renderTeam();
+updateProgress();
+
+function updateProgress() {
+  const pct = ((state.step - 1) / (state.totalSteps - 1)) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `Paso ${state.step} de ${state.totalSteps}`;
+}
+
+/* ── NAVIGATION ── */
+function nextStep(from) {
+  if (!validate(from)) return;
+  document.getElementById('step-' + from).classList.remove('active');
+  state.step = from + 1;
+  if (state.step <= state.totalSteps) {
+    document.getElementById('step-' + state.step).classList.add('active');
+    if (state.step === 5) renderPreview();
+  }
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function prevStep(from) {
+  document.getElementById('step-' + from).classList.remove('active');
+  state.step = from - 1;
+  document.getElementById('step-' + state.step).classList.add('active');
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function validate(step) {
+  const required = {
+    1: ['f-nombre','f-telefono','f-email','f-direccion','f-ciudad','f-fundacion'],
+  };
+  if (!required[step]) return true;
+  let ok = true;
+  required[step].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || !el.value.trim()) {
+      el && el.classList.add('error');
+      ok = false;
+    } else {
+      el.classList.remove('error');
+    }
+  });
+  if (!ok) {
+    const firstErr = document.querySelector('.error');
+    if (firstErr) firstErr.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+  return ok;
+}
+
+/* ── DAYS ── */
+function renderDays() {
+  const grid = document.getElementById('days-grid');
+  grid.innerHTML = '';
+  Object.entries(state.dias).forEach(([dia, open]) => {
+    const btn = document.createElement('button');
+    btn.className = 'day-toggle-btn' + (open ? ' on' : '');
+    btn.textContent = dia.slice(0,3);
+    btn.title = dia;
+    btn.onclick = () => {
+      state.dias[dia] = !state.dias[dia];
+      btn.classList.toggle('on', state.dias[dia]);
+    };
+    grid.appendChild(btn);
+  });
+}
+
+/* ── SLOTS ── */
+function renderSlots() {
+  const c = document.getElementById('slots-container');
+  c.innerHTML = '';
+  state.slots.forEach((slot, i) => {
+    const chip = document.createElement('div'); chip.className = 'slot-chip';
+    chip.innerHTML = `🕐 ${slot} <button onclick="removeSlot(${i})" title="Eliminar">✕</button>`;
+    c.appendChild(chip);
+  });
+}
+function addSlot() {
+  const inp = document.getElementById('new-slot');
+  const val = inp.value.slice(0,5);
+  if (val && !state.slots.includes(val)) {
+    state.slots.push(val);
+    state.slots.sort();
+    renderSlots();
+  }
+  inp.value = '';
+}
+function removeSlot(i) { state.slots.splice(i,1); renderSlots(); }
+
+/* ── SERVICES ── */
+function renderServices() {
+  const rows = document.getElementById('service-rows');
+  rows.innerHTML = '';
+  state.servicios.forEach((s, i) => {
+    const row = document.createElement('div'); row.className = 'service-row';
+    row.innerHTML = `
+      <input class="srv-icon" type="text" maxlength="2" value="${s.icono}" onchange="state.servicios[${i}].icono=this.value"/>
+      <input class="srv-name" type="text" value="${s.nombre}" placeholder="Nombre del servicio" onchange="state.servicios[${i}].nombre=this.value"/>
+      <input class="srv-price" type="text" value="${s.precio}" placeholder="Precio" onchange="state.servicios[${i}].precio=this.value"/>
+      <button class="btn-del" onclick="removeService(${i})" title="Eliminar">✕</button>`;
+    rows.appendChild(row);
+  });
+}
+function addService() {
+  state.servicios.push({ icono:'⭐', nombre:'', precio:'Consultar' });
+  renderServices();
+}
+function removeService(i) { state.servicios.splice(i,1); renderServices(); }
+
+/* ── TEAM ── */
+function renderTeam() {
+  const wrap = document.getElementById('team-rows');
+  wrap.innerHTML = '';
+  state.equipo.forEach((m, i) => {
+    const div = document.createElement('div');
+    div.style.cssText = 'margin-bottom:16px;';
+    div.innerHTML = `
+      <div style="font-size:.8rem;font-weight:700;color:var(--teal);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">Profesional ${i+1}</div>
+      <div class="field-row" style="margin-bottom:10px;">
+        <div class="field" style="margin-bottom:0;"><label>Nombre y título</label>
+          <input type="text" placeholder="Ej: Dr. Carlos López" value="${m.nombre}" onchange="state.equipo[${i}].nombre=this.value"/></div>
+        <div class="field" style="margin-bottom:0;"><label>Especialidad</label>
+          <input type="text" placeholder="Ej: Cirujano Oral · Director" value="${m.rol}" onchange="state.equipo[${i}].rol=this.value"/></div>
+      </div>
+      <div class="field" style="margin-bottom:0;"><label>Bio breve</label>
+        <input type="text" placeholder="Ej: Especialista en implantes con 20 años de experiencia" value="${m.bio}" onchange="state.equipo[${i}].bio=this.value"/></div>`;
+    wrap.appendChild(div);
+  });
+}
+
+/* ── PREVIEW ── */
+function renderPreview() {
+  // collect current service rows before preview
+  document.querySelectorAll('.service-row').forEach((row, i) => {
+    const inputs = row.querySelectorAll('input');
+    if (state.servicios[i]) {
+      state.servicios[i].icono  = inputs[0].value;
+      state.servicios[i].nombre = inputs[1].value;
+      state.servicios[i].precio = inputs[2].value;
+    }
+  });
+
+  const g = id => document.getElementById(id)?.value?.trim() || '—';
+  const diasAbr = Object.entries(state.dias).filter(([,v])=>v).map(([k])=>k.slice(0,3)).join(', ');
+  const slots   = state.slots.join(' · ');
+  const svcs    = state.servicios.map(s=>`${s.icono} ${s.nombre} (${s.precio})`).join(' | ');
+
+  document.getElementById('preview-content').innerHTML = `
+    <div class="preview-block">
+      <h4>🏢 Clínica</h4>
+      ${row('Nombre',g('f-nombre'))}${row('Eslogan',g('f-eslogan'))}${row('Fundación',g('f-fundacion'))}
+      ${row('Teléfono',g('f-telefono'))}${row('Email',g('f-email'))}
+      ${row('Dirección',g('f-direccion'))}${row('Ciudad',g('f-ciudad'))}
+      ${row('WhatsApp',g('f-whatsapp'))}${row('Web',g('f-url'))}
+    </div>
+    <div class="preview-block">
+      <h4>📅 Horarios</h4>
+      ${row('Días abiertos', diasAbr || '—')}
+      ${row('Horario general', g('h-desde')+' – '+g('h-hasta'))}
+      ${row('Franjas citas', slots || '—')}
+    </div>
+    <div class="preview-block">
+      <h4>🦷 Servicios</h4>
+      ${row('Lista', svcs || '—')}
+    </div>
+    <div class="preview-block">
+      <h4>⭐ Stats</h4>
+      ${row('Pacientes',g('s-pacientes'))}${row('Experiencia',g('s-anios'))}
+      ${row('Recomend.',g('s-reco'))}${row('Rating',g('s-rating')+' ('+g('s-nreviews')+' reseñas)')}
+    </div>`;
+}
+
+function row(k, v) {
+  return `<div class="preview-row"><span class="preview-key">${k}</span><span class="preview-val">${v}</span></div>`;
+}
+
+/* ── GENERATE CONFIG ── */
+function generarConfig() {
+  // collect latest from DOM
+  document.querySelectorAll('.service-row').forEach((r,i)=>{
+    const ins = r.querySelectorAll('input');
+    if (state.servicios[i]){ state.servicios[i].icono=ins[0].value; state.servicios[i].nombre=ins[1].value; state.servicios[i].precio=ins[2].value; }
+  });
+
+  const g = id => (document.getElementById(id)?.value?.trim()||'');
+  const horario = Object.entries(state.dias).map(([dia,open])=>({
+    dia, open, de: g('h-desde')||'09:00', hasta: g('h-hasta')||'20:00'
+  }));
+  // Saturday typically shorter
+  const sabIdx = horario.findIndex(d=>d.dia==='Sábado');
+  if (sabIdx>-1 && horario[sabIdx].hasta==='20:00') horario[sabIdx].hasta='14:00';
+
+  const config = {
+    clinica: {
+      nombre:    g('f-nombre')    || 'Mi Clínica Dental',
+      eslogan:   g('f-eslogan')   || 'Tu sonrisa, nuestra pasión',
+      fundacion: g('f-fundacion') || '2010',
+      telefono:  g('f-telefono')  || '',
+      email:     g('f-email')     || '',
+      direccion: g('f-direccion') || '',
+      whatsapp:  g('f-whatsapp')  || '',
+    }
+  };
+
+  const js = `  /* ── Clínica ── */
+  clinica: {
+    nombre:     "${config.clinica.nombre}",
+    eslogan:    "${config.clinica.eslogan}",
+    fundacion:  "${config.clinica.fundacion}",
+    telefono:   "${config.clinica.telefono}",
+    email:      "${config.clinica.email}",
+    direccion:  "${config.clinica.direccion}",
+    whatsapp:   "${config.clinica.whatsapp}",
+  },
+
+  /* ── Notificaciones ── */
+  notificaciones: {
+    metodo:        "whatsapp",
+    emailDestino:  "${config.clinica.email}",
+  },
+
+  /* ── Horario ── */
+  horario: [
+${horario.map(d=>`    { dia: "${d.dia.padEnd(11)}", open: ${String(d.open).padEnd(5)}, de: "${d.de}", hasta: "${d.hasta}" },`).join('\n')}
+  ],
+
+  /* ── Franjas horarias ── */
+  franjas: [
+${state.slots.map(s=>`    "${s}",`).join('\n')}
+  ],
+
+  /* ── Servicios ── */
+  servicios: [
+${state.servicios.map(s=>`    { icono: "${s.icono}", nombre: "${s.nombre}", precio: "${s.precio}", descripcion: "Descripción del servicio. Editar en la landing." },`).join('\n')}
+  ],`;
+
+  document.getElementById('export-area').textContent = js;
+}
+
+function copiarConfig() {
+  const text = document.getElementById('export-area').textContent;
+  if (text.startsWith('Hacé')) { generarConfig(); return; }
+  navigator.clipboard.writeText(text)
+    .then(()=>{ const btn=event.target; btn.textContent='✅ Copiado!'; setTimeout(()=>btn.textContent='📋 Copiar al portapapeles',2000); });
+}
+
+function finalizarFormulario() {
+  document.getElementById('step-5').style.display = 'none';
+  document.getElementById('success-screen').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function reiniciar() {
+  window.location.reload();
+}
+</script>
+</body>
+</html>
