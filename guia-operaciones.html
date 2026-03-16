@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Guía de Operaciones · Landing Dental</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#0F1117; --surface:#1A1D27; --surface2:#21253A; --border:#2A2F45;
+    --teal:#2DD4BF; --gold:#F59E0B; --red:#F87171; --green:#4ADE80;
+    --text:#E2E8F0; --muted:#64748B; --muted2:#94A3B8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+
+  .layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh;}
+
+  /* Sidebar */
+  aside{background:var(--surface);border-right:1px solid var(--border);
+    padding:0;position:sticky;top:0;height:100vh;overflow-y:auto;}
+  .aside-header{padding:28px 22px 20px;border-bottom:1px solid var(--border);}
+  .aside-logo{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:white;
+    display:flex;align-items:center;gap:10px;}
+  .aside-logo-dot{width:30px;height:30px;background:linear-gradient(135deg,var(--teal),#0EA5B0);
+    border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem;}
+  .aside-sub{font-size:.75rem;color:var(--muted);margin-top:5px;}
+  .aside-nav{padding:16px 12px;}
+  .nav-group-title{font-size:.68rem;font-weight:700;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--muted);padding:8px 10px 5px;}
+  .nav-link{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:8px;
+    text-decoration:none;font-size:.86rem;font-weight:500;color:var(--muted2);
+    transition:all .18s;cursor:pointer;border:none;background:none;width:100%;text-align:left;}
+  .nav-link:hover{background:var(--surface2);color:white;}
+  .nav-link.active{background:rgba(45,212,191,.12);color:var(--teal);}
+  .nav-icon{font-size:.95rem;width:18px;text-align:center;}
+
+  /* Main */
+  main{padding:48px 60px;max-width:860px;}
+
+  h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:white;
+    margin-bottom:10px;line-height:1.2;}
+  .subtitle{color:var(--muted2);font-size:1rem;margin-bottom:40px;line-height:1.6;}
+
+  /* Sections */
+  section{margin-bottom:60px;scroll-margin-top:40px;}
+  h2{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;color:white;
+    margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+  .section-sub{color:var(--muted2);font-size:.88rem;margin-bottom:24px;}
+
+  /* Cards */
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+    padding:24px;margin-bottom:16px;}
+  .card h3{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;color:white;
+    margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+
+  /* Steps */
+  .step-list{display:flex;flex-direction:column;gap:16px;}
+  .step-item{display:flex;gap:16px;align-items:flex-start;}
+  .step-num{width:32px;height:32px;border-radius:50%;background:rgba(45,212,191,.15);
+    border:1.5px solid rgba(45,212,191,.3);color:var(--teal);font-weight:800;
+    font-size:.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+  .step-body strong{display:block;color:white;font-size:.92rem;margin-bottom:3px;}
+  .step-body p,.step-body span{color:var(--muted2);font-size:.87rem;line-height:1.6;}
+
+  /* Code blocks */
+  .code{background:#0D1117;border:1px solid var(--border);border-radius:10px;
+    padding:16px 18px;font-family:'Courier New',monospace;font-size:.8rem;
+    color:#94A3B8;line-height:1.8;overflow-x:auto;margin:10px 0;}
+  .code .kw{color:var(--teal);}
+  .code .str{color:#A78BFA;}
+  .code .cmt{color:#475569;font-style:italic;}
+
+  /* Badges */
+  .badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;
+    border-radius:20px;font-size:.75rem;font-weight:700;}
+  .badge.green{background:rgba(74,222,128,.12);color:var(--green);border:1px solid rgba(74,222,128,.2);}
+  .badge.gold{background:rgba(245,158,11,.12);color:var(--gold);border:1px solid rgba(245,158,11,.2);}
+  .badge.red{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.2);}
+  .badge.teal{background:rgba(45,212,191,.12);color:var(--teal);border:1px solid rgba(45,212,191,.2);}
+
+  /* Pricing table */
+  .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .pricing-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;
+    padding:22px;text-align:center;position:relative;overflow:hidden;}
+  .pricing-card.featured{border-color:rgba(45,212,191,.4);background:rgba(45,212,191,.06);}
+  .pricing-card.featured::before{content:'RECOMENDADO';position:absolute;top:12px;right:-22px;
+    background:var(--teal);color:#0F1117;font-size:.6rem;font-weight:800;padding:3px 30px;
+    transform:rotate(35deg);letter-spacing:.08em;}
+  .p-name{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:800;color:white;margin-bottom:8px;}
+  .p-price{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--teal);margin-bottom:4px;}
+  .p-price span{font-size:.85rem;color:var(--muted2);font-weight:400;}
+  .p-desc{font-size:.78rem;color:var(--muted2);margin-bottom:16px;line-height:1.5;}
+  .p-features{list-style:none;text-align:left;}
+  .p-features li{font-size:.8rem;color:var(--muted2);padding:4px 0;
+    display:flex;gap:8px;align-items:flex-start;}
+  .p-features li::before{content:'✓';color:var(--teal);font-weight:700;flex-shrink:0;}
+
+  /* Checklist */
+  .checklist{display:flex;flex-direction:column;gap:10px;}
+  .check-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;
+    background:var(--surface2);border-radius:10px;cursor:pointer;}
+  .check-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--teal);
+    margin-top:2px;flex-shrink:0;cursor:pointer;}
+  .check-item label{font-size:.88rem;color:var(--muted2);cursor:pointer;line-height:1.5;}
+  .check-item label strong{display:block;color:white;font-size:.9rem;margin-bottom:1px;}
+
+  /* Alert */
+  .alert{border-radius:10px;padding:14px 18px;font-size:.87rem;line-height:1.6;margin:12px 0;}
+  .alert.info{background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);color:var(--teal);}
+  .alert.warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:var(--gold);}
+  .alert.tip{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);color:var(--green);}
+
+  hr{border:none;border-top:1px solid var(--border);margin:40px 0;}
+
+  @media(max-width:900px){
+    .layout{grid-template-columns:1fr;}
+    aside{display:none;}
+    main{padding:28px 20px;}
+    .pricing-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside>
+  <div class="aside-header">
+    <div class="aside-logo"><div class="aside-logo-dot">🦷</div>Landing Dental</div>
+    <div class="aside-sub">Guía de Operaciones · Agencia</div>
+  </div>
+  <nav class="aside-nav">
+    <div class="nav-group-title">Proceso</div>
+    <a class="nav-link active" href="#flujo"><span class="nav-icon">🔄</span>Flujo de trabajo</a>
+    <a class="nav-link" href="#onboarding"><span class="nav-icon">📋</span>Onboarding del cliente</a>
+    <a class="nav-link" href="#configurar"><span class="nav-icon">⚙️</span>Configurar la landing</a>
+    <a class="nav-link" href="#publicar"><span class="nav-icon">🚀</span>Publicar online</a>
+    <div class="nav-group-title" style="margin-top:12px;">Negocio</div>
+    <a class="nav-link" href="#precios"><span class="nav-icon">💰</span>Modelos de precio</a>
+    <a class="nav-link" href="#mantenimiento"><span class="nav-icon">🔧</span>Mantenimiento</a>
+    <a class="nav-link" href="#checklist"><span class="nav-icon">✅</span>Checklist de entrega</a>
+    <div class="nav-group-title" style="margin-top:12px;">Referencia</div>
+    <a class="nav-link" href="#archivos"><span class="nav-icon">📁</span>Archivos del kit</a>
+    <a class="nav-link" href="#faq"><span class="nav-icon">❓</span>FAQ</a>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main>
+  <h1>Guía de Operaciones</h1>
+  <p class="subtitle">Todo lo que necesitás saber para vender, configurar, publicar y mantener landings dentales para tus clientes. Sin conocimientos técnicos avanzados.</p>
+
+  <!-- FLUJO -->
+  <section id="flujo">
+    <h2>🔄 Flujo de trabajo completo</h2>
+    <p class="section-sub">De la venta a la entrega en 4 pasos simples.</p>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Vendés el servicio a la clínica</strong>
+          <p>Mostrás la demo (el HTML de la landing con datos de ejemplo). Le explicás que en 48h tienen su página personalizada y funcionando online. Cobrás por adelantado.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>El cliente completa el formulario de onboarding</strong>
+          <p>Le mandás el archivo <code style="color:var(--teal);">onboarding-dental.html</code>. Lo abre en su navegador, completa sus datos en 10 minutos y te manda el bloque CONFIG generado por el formulario.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Vos pegás el CONFIG en la landing y la publicás</strong>
+          <p>Abrís <code style="color:var(--teal);">clinica-dental-landing.html</code> en un editor de texto, reemplazás el bloque <code style="color:var(--teal);">const CONFIG = {'{...}'}</code> con el que te mandó el cliente, y subís el archivo al hosting. Listo.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Entregás y cobrás el mantenimiento mensual</strong>
+          <p>Le mandás la URL al cliente. Si contrata mantenimiento, ante cualquier cambio (precio, horario, servicio nuevo) el cliente te avisa, vos lo actualizás en el CONFIG y subís el archivo. Tarda menos de 5 minutos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ONBOARDING -->
+  <section id="onboarding">
+    <h2>📋 Onboarding del cliente</h2>
+    <p class="section-sub">El formulario recopila todo sin que vos tengas que preguntar nada.</p>
+
+    <div class="card">
+      <h3>📤 Cómo mandarlo</h3>
+      <p style="color:var(--muted2);font-size:.88rem;line-height:1.6;">
+        El archivo <code style="color:var(--teal);">onboarding-dental.html</code> es standalone — no necesita servidor, se abre directo en el navegador. Opciones para enviarlo:
+      </p>
+      <div class="step-list" style="margin-top:16px;">
+        <div class="step-item">
+          <div class="step-num" style="font-size:.75rem;">A</div>
+          <div class="step-body"><strong>Por email (adjunto)</strong><span>El cliente lo descarga y lo abre. Funciona en Chrome, Edge, Firefox.</span></div>
+        </div>
+        <div class="step-item">
+          <div class="step-num" style="font-size:.75rem;">B</div>
+          <div class="step-body"><strong>Por Google Drive / WeTransfer</strong><span>Lo subís vos y le mandás el link de descarga.</span></div>
+        </div>
+        <div class="step-item">
+          <div class="step-num" style="font-size:.75rem;">C</div>
+          <div class="step-body"><strong>Subido a Netlify Drop</strong><span>Arrastrás el HTML a <a href="https://app.netlify.com/drop" target="_blank" style="color:var(--teal);">app.netlify.com/drop</a> y le mandás el link. Queda online permanentemente y el cliente lo puede abrir desde el teléfono.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert info">
+      💡 <strong>Tip:</strong> Si el cliente no entiende cómo abrir el archivo, grabá un video de Loom de 2 minutos mostrándolo. Lo reutilizás para todos los clientes.
+    </div>
+  </section>
+
+  <!-- CONFIGURAR -->
+  <section id="configurar">
+    <h2>⚙️ Configurar la landing</h2>
+    <p class="section-sub">Una vez que tenés el bloque CONFIG del cliente, el proceso es simple.</p>
+
+    <div class="card">
+      <h3>🛠️ Qué editor usar</h3>
+      <p style="color:var(--muted2);font-size:.88rem;line-height:1.6;margin-bottom:12px;">
+        Recomendamos <strong style="color:white;">Visual Studio Code</strong> (gratis). Si no querés instalar nada, usá <strong style="color:white;">Notepad++</strong> (Windows) o el editor de texto del sistema.
+      </p>
+      <div class="alert tip">Descargá VS Code en <a href="https://code.visualstudio.com" target="_blank" style="color:var(--green);">code.visualstudio.com</a> — gratis, liviano, y resalta el código en colores.</div>
+    </div>
+
+    <div class="card">
+      <h3>📝 Paso a paso — reemplazar el CONFIG</h3>
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-body"><strong>Abrí el archivo en VS Code</strong><span>Arrastrá <code style="color:var(--teal);">clinica-dental-landing.html</code> a VS Code o hacé clic derecho → Abrir con → VS Code.</span></div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Usá Buscar y Reemplazar</strong>
+            <span>Presioná <kbd style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:.8rem;">Ctrl+H</kbd> (Windows) o <kbd style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:.8rem;">Cmd+H</kbd> (Mac).</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Buscá el bloque CONFIG</strong>
+            <span>Buscá el texto <code style="color:var(--teal);">/* ── Clínica ── */</code> — ese es el inicio del bloque que vas a reemplazar. Seleccioná desde ahí hasta el cierre de los mensajes.</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-body"><strong>Pegá el nuevo CONFIG del cliente</strong><span>Reemplazá lo seleccionado con el bloque que generó el formulario de onboarding. Guardá con <kbd style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:.8rem;">Ctrl+S</kbd>.</span></div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-body"><strong>Verificá abriendo el archivo en el navegador</strong><span>Doble clic en el HTML → se abre en Chrome. Revisá que el nombre de la clínica, teléfono y servicios estén correctos.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🔍 También editar en el HTML (textos fijos)</h3>
+      <p style="color:var(--muted2);font-size:.88rem;line-height:1.6;">
+        Algunos textos no están en el CONFIG porque son raramente cambiados. Para editarlos, buscá los comentarios <code style="color:var(--gold);">← EDITAR</code> en el HTML con <kbd style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:.8rem;">Ctrl+F</kbd>. Entre ellos:
+      </p>
+      <div class="code"><span class="cmt">/* Estos se buscan con Ctrl+F ← EDITAR */</span>
+&lt;!-- EDITAR: nombre --&gt;  → nombre en el navbar
+&lt;!-- EDITAR: año --&gt;      → año de fundación en el hero
+schema.org               → datos SEO estructurados (dirección, teléfono, horarios)
+&lt;meta og:image&gt;          → imagen para compartir en redes (1200×630px)</div>
+    </div>
+  </section>
+
+  <!-- PUBLICAR -->
+  <section id="publicar">
+    <h2>🚀 Publicar online</h2>
+    <p class="section-sub">Tres opciones según el presupuesto del cliente. Todas funcionan con un único archivo HTML.</p>
+
+    <div class="card">
+      <h3>⚡ Opción A — Netlify Drop (gratis, 2 minutos)</h3>
+      <p style="color:var(--muted2);font-size:.88rem;line-height:1.6;margin-bottom:12px;">Ideal para empezar rápido o para demos. El cliente puede usar su propio dominio.</p>
+      <div class="step-list">
+        <div class="step-item"><div class="step-num">1</div><div class="step-body"><strong>Ir a app.netlify.com/drop</strong></div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-body"><strong>Arrastrar el archivo HTML</strong><span>Netlify genera una URL tipo <code style="color:var(--teal);">nombre-random.netlify.app</code>.</span></div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-body"><strong>Conectar dominio propio (opcional)</strong><span>Desde el panel de Netlify → Domain settings → Add custom domain.</span></div></div>
+      </div>
+      <div class="alert tip">✅ Gratis, HTTPS automático, CDN global. Perfecto para la mayoría de los clientes.</div>
+    </div>
+
+    <div class="card">
+      <h3>🌐 Opción B — GitHub Pages (gratis, requiere cuenta GitHub)</h3>
+      <div class="code">1. Crear repositorio en github.com
+2. Subir el HTML renombrado como <span class="kw">index.html</span>
+3. Settings → Pages → Deploy from branch: main
+4. URL: <span class="str">https://usuario.github.io/nombre-repo</span></div>
+    </div>
+
+    <div class="card">
+      <h3>🏠 Opción C — Hosting del cliente (cPanel / FTP)</h3>
+      <p style="color:var(--muted2);font-size:.88rem;line-height:1.6;margin-bottom:12px;">Si el cliente ya tiene hosting (GoDaddy, Hostinger, SiteGround, etc.):</p>
+      <div class="step-list">
+        <div class="step-item"><div class="step-num">1</div><div class="step-body"><strong>Acceder al File Manager del cPanel</strong></div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-body"><strong>Navegar a la carpeta public_html</strong></div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-body"><strong>Subir el HTML renombrado como index.html</strong><span>Si ya existe un index.html viejo, hacer backup antes.</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRECIOS -->
+  <section id="precios">
+    <h2>💰 Modelos de precio sugeridos</h2>
+    <p class="section-sub">Tres modelos según tu propuesta de valor. Podés combinarlos.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="p-name">One-Shot</div>
+        <div class="p-price">€297 <span>único pago</span></div>
+        <div class="p-desc">Entrega única sin mantenimiento</div>
+        <ul class="p-features">
+          <li>Landing personalizada</li>
+          <li>Chatbot configurado</li>
+          <li>SEO básico</li>
+          <li>Publicación online</li>
+          <li>1 ronda de revisiones</li>
+        </ul>
+      </div>
+      <div class="pricing-card featured">
+        <div class="p-name">Setup + Mensual</div>
+        <div class="p-price">€197 <span>+ €49/mes</span></div>
+        <div class="p-desc">Setup inicial + mantenimiento activo</div>
+        <ul class="p-features">
+          <li>Todo lo del One-Shot</li>
+          <li>Cambios ilimitados de contenido</li>
+          <li>Actualización de precios/horarios</li>
+          <li>Soporte por WhatsApp</li>
+          <li>Backup mensual</li>
+        </ul>
+      </div>
+      <div class="pricing-card">
+        <div class="p-name">Premium</div>
+        <div class="p-price">€497 <span>+ €89/mes</span></div>
+        <div class="p-desc">Para clínicas con más exigencias</div>
+        <ul class="p-features">
+          <li>Todo lo anterior</li>
+          <li>Foto de stock profesional</li>
+          <li>Google Analytics configurado</li>
+          <li>Reporte mensual de visitas</li>
+          <li>Revisiones prioritarias 24h</li>
+        </ul>
+      </div>
+    </div>
+    <div class="alert warn" style="margin-top:20px;">
+      ⚠️ <strong>Importante:</strong> El tiempo real de trabajo por cliente es de 30–60 minutos (onboarding + configuración + publicación). El precio se justifica por el valor entregado, no por el tiempo.
+    </div>
+  </section>
+
+  <!-- MANTENIMIENTO -->
+  <section id="mantenimiento">
+    <h2>🔧 Mantenimiento y cambios</h2>
+    <p class="section-sub">Qué hacer ante los cambios más comunes que piden los clientes.</p>
+
+    <div class="card">
+      <h3>📋 Cambios frecuentes y dónde hacerlos</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.85rem;">
+          <div style="background:var(--surface2);border-radius:8px;padding:12px;">
+            <div style="color:white;font-weight:600;margin-bottom:4px;">Cambio de precio</div>
+            <div style="color:var(--muted2);">CONFIG → servicios → precio</div>
+            <div style="margin-top:4px;"><span class="badge teal">~2 min</span></div>
+          </div>
+          <div style="background:var(--surface2);border-radius:8px;padding:12px;">
+            <div style="color:white;font-weight:600;margin-bottom:4px;">Nuevo horario</div>
+            <div style="color:var(--muted2);">CONFIG → horario → de/hasta/open</div>
+            <div style="margin-top:4px;"><span class="badge teal">~2 min</span></div>
+          </div>
+          <div style="background:var(--surface2);border-radius:8px;padding:12px;">
+            <div style="color:white;font-weight:600;margin-bottom:4px;">Nuevo servicio</div>
+            <div style="color:var(--muted2);">CONFIG → servicios → añadir objeto</div>
+            <div style="margin-top:4px;"><span class="badge teal">~3 min</span></div>
+          </div>
+          <div style="background:var(--surface2);border-radius:8px;padding:12px;">
+            <div style="color:white;font-weight:600;margin-bottom:4px;">Cambio de teléfono</div>
+            <div style="color:var(--muted2);">CONFIG → clinica → telefono + schema.org en head</div>
+            <div style="margin-top:4px;"><span class="badge gold">~5 min</span></div>
+          </div>
+          <div style="background:var(--surface2);border-radius:8px;padding:12px;">
+            <div style="color:white;font-weight:600;margin-bottom:4px;">Cambio de foto de equipo</div>
+            <div style="color:var(--muted2);">HTML → sección .team → reemplazar emoji por &lt;img&gt;</div>
+            <div style="margin-top:4px;"><span class="badge gold">~10 min</span></div>
+          </div>
+          <div style="background:var(--surface2);border-radius:8px;padding:12px;">
+            <div style="color:white;font-weight:600;margin-bottom:4px;">Nuevo profesional</div>
+            <div style="color:var(--muted2);">HTML → .team-grid → copiar un .team-card</div>
+            <div style="margin-top:4px;"><span class="badge gold">~5 min</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section id="checklist">
+    <h2>✅ Checklist de entrega</h2>
+    <p class="section-sub">Revisá estos puntos antes de entregar la landing al cliente.</p>
+    <div class="checklist">
+      <div class="check-item"><input type="checkbox" id="c1"/><label for="c1"><strong>Nombre y datos de la clínica correctos</strong>Navbar, hero, footer, sección contacto y schema.org.</label></div>
+      <div class="check-item"><input type="checkbox" id="c2"/><label for="c2"><strong>Teléfono y email funcionales</strong>El botón WhatsApp abre un chat real. El formulario envía al email correcto.</label></div>
+      <div class="check-item"><input type="checkbox" id="c3"/><label for="c3"><strong>Chatbot configurado</strong>Probá el flujo completo: reservar una cita, consultar precios y "hablar con alguien".</label></div>
+      <div class="check-item"><input type="checkbox" id="c4"/><label for="c4"><strong>Servicios y precios actualizados</strong>Los que aparecen en la grilla y en el chatbot coinciden con la oferta real.</label></div>
+      <div class="check-item"><input type="checkbox" id="c5"/><label for="c5"><strong>Horarios correctos</strong>Los días disponibles en el chatbot coinciden con el horario real de la clínica.</label></div>
+      <div class="check-item"><input type="checkbox" id="c6"/><label for="c6"><strong>SEO — meta title y description editados</strong>Incluyen el nombre de la ciudad y el nombre de la clínica.</label></div>
+      <div class="check-item"><input type="checkbox" id="c7"/><label for="c7"><strong>Schema.org actualizado</strong>Dirección, teléfono, horarios y URL correctos en el bloque JSON-LD del head.</label></div>
+      <div class="check-item"><input type="checkbox" id="c8"/><label for="c8"><strong>URL canónica configurada</strong>El &lt;link rel="canonical"&gt; apunta al dominio real del cliente.</label></div>
+      <div class="check-item"><input type="checkbox" id="c9"/><label for="c9"><strong>Visualización mobile correcta</strong>Probá en Chrome → DevTools → modo responsive (iPhone 12 y Pixel 5).</label></div>
+      <div class="check-item"><input type="checkbox" id="c10"/><label for="c10"><strong>Cookie banner aparece en la primera visita</strong>Probá en una ventana de incógnito.</label></div>
+      <div class="check-item"><input type="checkbox" id="c11"/><label for="c11"><strong>HTTPS activo en producción</strong>La URL empieza por https:// (Netlify lo hace automático).</label></div>
+      <div class="check-item"><input type="checkbox" id="c12"/><label for="c12"><strong>Backup del archivo final guardado</strong>Guardá una copia con el nombre del cliente antes de subir.</label></div>
+    </div>
+  </section>
+
+  <!-- ARCHIVOS -->
+  <section id="archivos">
+    <h2>📁 Archivos del kit</h2>
+    <p class="section-sub">Los tres archivos que componen el producto que vendés.</p>
+    <div class="card">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;align-items:flex-start;gap:14px;">
+          <div style="font-size:1.5rem;">📄</div>
+          <div>
+            <div style="color:white;font-weight:700;font-size:.92rem;">clinica-dental-landing.html</div>
+            <div style="color:var(--muted2);font-size:.84rem;margin-top:3px;">La landing page completa con chatbot, SEO, WhatsApp y trust signals. Es el producto que entregás al cliente. Un solo archivo, sin dependencias externas.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:14px;">
+          <div style="font-size:1.5rem;">📋</div>
+          <div>
+            <div style="color:white;font-weight:700;font-size:.92rem;">onboarding-dental.html</div>
+            <div style="color:var(--muted2);font-size:.84rem;margin-top:3px;">Formulario de 5 pasos que le mandás al cliente para recopilar todos sus datos. Genera automáticamente el bloque CONFIG para copiar y pegar.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:14px;">
+          <div style="font-size:1.5rem;">📖</div>
+          <div>
+            <div style="color:white;font-weight:700;font-size:.92rem;">guia-operaciones.html</div>
+            <div style="color:var(--muted2);font-size:.84rem;margin-top:3px;">Este documento. Tu manual de referencia para vender, configurar y mantener landings.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <h2>❓ Preguntas frecuentes</h2>
+    <div class="card"><h3>¿El cliente puede editar la landing solo?</h3><p style="color:var(--muted2);font-size:.88rem;line-height:1.6;">No directamente — necesitan editar código HTML. Por eso existe el modelo de mantenimiento mensual: vos hacés los cambios por ellos. Si el cliente insiste en editarlo solo, podés usar el <code style="color:var(--teal);">admin-panel.html</code> que genera el CONFIG, y ellos te lo mandan a vos para actualizar.</p></div>
+    <div class="card"><h3>¿El chatbot envía citas reales a algún sistema?</h3><p style="color:var(--muted2);font-size:.88rem;line-height:1.6;">Sí: cuando el paciente confirma, se abre WhatsApp Business con el resumen completo de la cita (o un mailto si se configura con "email"). No hay integración con calendarios automáticos — eso requeriría un backend. Para la mayoría de las clínicas pequeñas, el WhatsApp es suficiente.</p></div>
+    <div class="card"><h3>¿Se puede cambiar el color o la tipografía?</h3><p style="color:var(--muted2);font-size:.88rem;line-height:1.6;">Sí. Los colores están en el bloque <code style="color:var(--teal);">:root</code> al inicio del CSS. Cambiás <code style="color:var(--teal);">--teal</code>, <code style="color:var(--teal);">--navy</code> y <code style="color:var(--teal);">--gold</code> y toda la página se adapta. Las fuentes están en el link de Google Fonts en el head.</p></div>
+    <div class="card"><h3>¿Funciona en todos los navegadores?</h3><p style="color:var(--muted2);font-size:.88rem;line-height:1.6;">Sí — Chrome, Firefox, Safari, Edge. Compatible con mobile. No funciona en Internet Explorer (pero IE tiene menos del 0.5% de uso global en 2025).</p></div>
+    <div class="card"><h3>¿Necesito un servidor o base de datos?</h3><p style="color:var(--muted2);font-size:.88rem;line-height:1.6;">No. Es un único archivo HTML estático. Funciona en cualquier hosting, incluso los más básicos. Netlify lo hostea gratis.</p></div>
+  </section>
+
+</main>
+</div>
+</body>
+</html>
